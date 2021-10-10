@@ -21,6 +21,9 @@
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -cw",
+    "docs": "typedoc src/index.ts",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --fix --ext .ts",
     "format": "prettier --check **/*.ts",
     "format:fix": "prettier --write **/*.ts",
     "prebuild": "rimraf build",
@@ -39,9 +42,9 @@
     "ip",
     "ip-address",
     "network",
-    "networking"
+    "networking",
+    "vpc"
   ],
-  "dependencies": {},
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.5",
     "@types/jest": "^27.0.2",
@@ -56,6 +59,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.58.0",
     "ts-jest": "^27.0.5",
+    "typedoc": "^0.22.5",
     "typescript": "^4.4.3"
   },
   "jest": {
