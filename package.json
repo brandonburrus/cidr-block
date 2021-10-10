@@ -1,0 +1,94 @@
+{
+  "name": "cidr-block",
+  "description": "cidr range utils for allocating blocks of ip ranges using cidr notation",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Brandon Burrus <brandon@burrus.io>",
+  "homepage": "https://cidr-block.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrandonBurrus/cidr-block.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BrandonBurrus/cidr-block/issues"
+  },
+  "main": "build/index.js",
+  "module": "build/index.esm.js",
+  "types": "build/src/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -cw",
+    "format": "prettier --check **/*.ts",
+    "format:fix": "prettier --write **/*.ts",
+    "prebuild": "rimraf build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:ui": "majestic"
+  },
+  "keywords": [
+    "aws",
+    "azure",
+    "cidr",
+    "cloud",
+    "devops",
+    "gcp",
+    "infrastructure",
+    "ip",
+    "ip-address",
+    "network",
+    "networking"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.2.5",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.10.3",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "jest": "^27.2.5",
+    "majestic": "^1.8.1",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.58.0",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/tests"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    }
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ]
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "bracketSameLine": true,
+    "bracketSpacing": true,
+    "jsxSingleQuote": true,
+    "printWidth": 100,
+    "quoteProps": "as-needed",
+    "semi": false,
+    "singleQuote": true,
+    "useTabs": false,
+    "trailingComma": "none"
+  }
+}
