@@ -1,10 +1,10 @@
-import { Ipv4CidrBlock } from './../../../src/cidr/ipv4/ipv4-cidr-block'
+import { Ipv4Cidr } from '../../../src/cidr/ipv4/ipv4-cidr'
 import * as cidr from '../../../src/index'
 
 describe('ipv4', () => {
   describe('block()', () => {
     it('instantiates an Ipv4CidrBlock instance', () => {
-      expect(cidr.ipv4.block('10.0.0.0/16')).toBeInstanceOf(Ipv4CidrBlock)
+      expect(cidr.ipv4.cidr('10.0.0.0/16')).toBeInstanceOf(Ipv4Cidr)
     })
 
     it.each([
@@ -39,12 +39,12 @@ describe('ipv4', () => {
       ['/28', 2n ** 4n],
       ['/29', 2n ** 3n],
       ['/30', 2n ** 2n],
-      ['/31', 2n ** 1n],
-      ['/32', 2n ** 0n]
+      ['/31', 2n],
+      ['/32', 1n]
     ])(
       'calculates the number of allocatable ip addresses [%s has %d ips]',
       (range: string, count: bigint) => {
-        expect(cidr.ipv4.block('0.0.0.0' + range).allocatableIpCount).toBe(count)
+        expect(cidr.ipv4.cidr('0.0.0.0' + range).allocatableIpCount).toBe(count)
       }
     )
 
@@ -54,9 +54,8 @@ describe('ipv4', () => {
       ['0.1.0.0/16', '0.2.0.0/16'],
       ['0.0.0.1/32', '0.0.0.2/32']
     ])('calculates the next block [%s to %s]', (start: string, end: string) => {
-      console.log(start, cidr.ipv4.block(start).netmask.toString())
-      expect(cidr.ipv4.block(start).nextBlock().toString()).toBe(end)
-      expect(cidr.ipv4.block(end).previousBlock().toString()).toBe(start)
+      expect(cidr.ipv4.cidr(start).nextBlock().toString()).toBe(end)
+      expect(cidr.ipv4.cidr(end).previousBlock().toString()).toBe(start)
     })
   })
 })
