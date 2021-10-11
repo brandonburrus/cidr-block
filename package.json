@@ -28,6 +28,7 @@
     "format:fix": "prettier --write **/*.ts",
     "prebuild": "rimraf build",
     "test": "jest",
+    "test:verbose": "jest --verbose",
     "test:watch": "jest --watch",
     "test:ui": "majestic"
   },
