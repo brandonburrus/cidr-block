@@ -28,6 +28,8 @@
     "format:fix": "prettier --write **/*.ts",
     "prebuild": "rimraf build",
     "test": "jest",
+    "test:ci": "jest --verbose --coverage",
+    "test:cov": "jest --coverage",
     "test:verbose": "jest --verbose",
     "test:watch": "jest --watch",
     "test:ui": "majestic"
@@ -68,6 +70,16 @@
     "testEnvironment": "node",
     "transform": {
       "^.+\\.ts$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
     }
   },
   "eslintConfig": {
