@@ -1,6 +1,6 @@
 {
   "name": "cidr-block",
-  "description": "cidr range utils for allocating blocks of ip ranges using cidr notation",
+  "description": "ipv4 and ipv6 address and cidr range utilities",
   "version": "1.0.1",
   "license": "MIT",
   "author": "Brandon Burrus <brandon@burrus.io>",

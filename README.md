@@ -1,6 +1,6 @@
 # cidr-block
 
-npm package for calculating CIDR range blocks
+ipv4 and ipv6 address and cidr range utilities
 
 ## WARNING
 
@@ -20,20 +20,52 @@ or if you're using yarn instead of npm
 yarn add cidr-block
 ```
 
+The package is written completely in TypeScript and exports all of it's types automatically,
+meaning you don't need to install any additional `@types` typings.
+
 ## Getting Started
 
 Start by defining a cidr range
 
 ```typescript
-import * as cidr from 'cidr-block'
+import { ipv4 as ip } from 'cidr-block'
 
-const myRange = cidr.ipv4.block('192.0.0.0/32')
+const myCidr = ip.cidr('10.0.0.0/24')
 ```
 
 To get the next logical cidr block
 
 ```typescript
-console.log(myRange.nextBlock()) // 192.0.0.1/32
+console.log(myCidr.nextBlock().toString()) // 10.0.1.0/24
 ```
 
-All cidr methods are immutable, meaning a new instance of the cidr is created every time a method is called on it.
+All `cidr-block` functions and methods are immutable, meaning a new instance will always be
+returned instead of trying to modify the current value.
+
+Once you have a cidr, you have access to all of it's related utilities:
+
+```typescript
+myCidr.netmask // 255.255.255.0
+myCidr.firstUsableIp // 10.0.0.0 (remember that methods act immutable, so this is still at 10.0.0.0)
+myCidr.lastUsableIp // 10.0.0.254
+myCidr.includes(ip.address('10.0.0.128')) // true
+```
+
+## Documentation and API Reference
+
+The full documentation and API reference can be found at https://cidr-block.com
+
+## FAQ
+
+Q: Why are the imports in all the example code like that?
+
+A: The imports in all example code are formatted as the following:
+
+```typescript
+import { ipv4 as ip } from 'cidr-block'
+// or commonjs-style
+const { ipv4: ip } = require('cidr-block')
+```
+
+While you don't have to follow this convention, the API is design like this on purpose to help speed
+up a refactoring of ipv4 to ipv6, as you would only need to change the number on the import.

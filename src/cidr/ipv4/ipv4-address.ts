@@ -1,3 +1,4 @@
+import { Ipv4Literal, Ipv4Representable } from './types'
 import { InvalidIpAddressError } from './../errors'
 import { MAX } from './constants'
 
@@ -13,15 +14,26 @@ const MAX_OCTET_SIZE = 255n
 export class Ipv4Address {
   private _address: bigint
 
-  public constructor(address: string | bigint) {
+  public constructor(address: Ipv4Literal) {
     this._address = typeof address === 'bigint' ? address : stringToNum(address)
   }
 
+  /**
+   * The address as a big integer
+   */
   public get address(): bigint {
     return this._address
   }
 
   /**
+   * @example
+   * ```typescript
+   * import { ipv4 as ip } from 'cidr-block'
+   *
+   * ip.address(255n)                                    // ==> '0.0.0.255'
+   * ip.address(0b11111111_00000000_11111111_00000000n)  // ==> '255.0.255.0'
+   * ````
+   *
    * @public
    * @returns the IPv4 address as a string
    */
@@ -32,18 +44,55 @@ export class Ipv4Address {
   /**
    * Compares if two IP address are the same.
    *
+   * @example
+   * ```typescript
+   * import { ipv4 as ip } from 'cidr-block'
+   *
+   * function isLoopback(address: Ipv4Representable) {
+   *  return ip.address(address).equals('127.0.0.1')
+   * }
+   * ```
+   *
    * @public
    * @param otherIpAddress the other IPv4 address to compare
    * @returns if the other IP address is the same
    */
-  public equals(otherIpAddress: Ipv4Address): boolean {
-    return this._address === otherIpAddress._address
+  public equals(otherIpAddress: Ipv4Representable): boolean {
+    if (otherIpAddress instanceof Ipv4Address) {
+      return this._address === otherIpAddress._address
+    } else {
+      return this._address === address(otherIpAddress)._address
+    }
   }
 
+  /**
+   * @example
+   * ```typescript
+   * import { ipv4 as ip } from 'cidr-block'
+   *
+   * const myIp = ip.address('52.89.32.255')
+   * myIp.nextIp()                                       // ==> '52.89.33.0
+   * ```
+   *
+   * @public
+   * @returns the next consecutive IPv4 address
+   */
   public nextIp(): Ipv4Address {
     return address(this._address + 1n)
   }
 
+  /**
+   * @example
+   * ```typescript
+   * import { ipv4 as ip } from 'cidr-block'
+   *
+   * const myIp = ip.address('52.89.32.19')
+   * myIp.previousIp()                                   // ==> '52.89.32.18
+   * ```
+   *
+   * @public
+   * @returns the preceding IPv4 address
+   */
   public previousIp(): Ipv4Address {
     return address(this._address - 1n)
   }
@@ -62,9 +111,9 @@ export class Ipv4Address {
  * @example
  *
  * ```typescript
- * import * as cidr from 'cidr-block'
+ * import { ipv4 as ip } from 'cidr-block'
  *
- * const localhost = cidr.ipv4.address('127.0.0.1')
+ * const localhost = ip.address('127.0.0.1')
  * ```
  *
  * @see {@link Ipv4Address}
@@ -72,26 +121,20 @@ export class Ipv4Address {
  * @param ip string representation of the IPv4 address
  * @returns an instance of Ipv4Address
  */
-export function address(ip: string | bigint): Ipv4Address {
+export function address(ip: Ipv4Literal): Ipv4Address {
   return new Ipv4Address(ip)
 }
 
 /**
  * Converts the string representation of an IPv4 address to a BigInt.
  *
- * @remarks
- *
- * Conversion must be between string and bigint instead of integer as
- * on 32-bit systems, Node.js may allocate the number as a 32-bit integer.
- * To avoid this behavior, a BigInt is always used instead.
- *
  * @example
  *
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
- * cidr.ipv4.fromString('255.255.255.255') === 4_294_967_295n     // ==> true
- * cidr.ipv4.fromString('0.0.0.255') === 255n                     // ==> true
+ * cidr.ipv4.stringToNum('255.255.255.255') === 4_294_967_295n     // ==> true
+ * cidr.ipv4.stringToNum('0.0.0.255') === 255n                     // ==> true
  * ```
  *
  * @see This method is the inverse of {@link ipv4.numToString}
@@ -120,20 +163,14 @@ export function stringToNum(address: string): bigint {
 /**
  * Converts the numerical BigInt representation of an IPv4 address to its string representation.
  *
- * @remarks
- *
- * Conversion must be between string and bigint instead of integer as
- * on 32-bit systems, Node.js may allocate the number as a 32-bit integer.
- * To avoid this behavior, a BigInt is always used instead.
- *
  * @example
  *
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
- * cidr.ipv4.toString(0n) === '0.0.0.0'                            // ==> true
- * cidr.ipv4.toString(65_280n) === '0.0.255.0'                     // ==> true
- * cidr.ipv4.toString(4_294_967_295n) === '255.255.255.255'        // ==> true
+ * cidr.ipv4.numToString(0n) === '0.0.0.0'                            // ==> true
+ * cidr.ipv4.numToString(65_280n) === '0.0.255.0'                     // ==> true
+ * cidr.ipv4.numToString(4_294_967_295n) === '255.255.255.255'        // ==> true
  * ```
  *
  * @see This method is the inverse of {@link ipv4.stringToNum}
