@@ -20,7 +20,9 @@ export default {
   external: Object.keys(pkg.dependencies || {}),
   plugins: [
     typescript({
-      tsconfig: './tsconfig.json'
+      tsconfig: './tsconfig.json',
+      rootDir: 'src',
+      exclude: ['tests/**/*']
     })
   ]
 }
