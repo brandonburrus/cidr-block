@@ -1,5 +1,5 @@
-import { IPv4_MAX } from './../constants'
 import { InvalidIpAddressError } from './../errors'
+import { MAX } from './constants'
 
 const MAX_OCTET_SIZE = 255n
 
@@ -11,10 +11,14 @@ const MAX_OCTET_SIZE = 255n
  * Direct instantiation should be avoided; use {@link ipv4.address|ipv4.address()} instead.
  */
 export class Ipv4Address {
-  private address: bigint
+  private _address: bigint
 
-  public constructor(address: string) {
-    this.address = fromString(address)
+  public constructor(address: string | bigint) {
+    this._address = typeof address === 'bigint' ? address : stringToNum(address)
+  }
+
+  public get address(): bigint {
+    return this._address
   }
 
   /**
@@ -22,7 +26,7 @@ export class Ipv4Address {
    * @returns the IPv4 address as a string
    */
   public toString(): string {
-    return toString(this.address)
+    return numToString(this._address)
   }
 
   /**
@@ -33,7 +37,15 @@ export class Ipv4Address {
    * @returns if the other IP address is the same
    */
   public equals(otherIpAddress: Ipv4Address): boolean {
-    return this.address === otherIpAddress.address
+    return this._address === otherIpAddress._address
+  }
+
+  public nextIp(): Ipv4Address {
+    return address(this._address + 1n)
+  }
+
+  public previousIp(): Ipv4Address {
+    return address(this._address - 1n)
   }
 }
 
@@ -60,7 +72,7 @@ export class Ipv4Address {
  * @param ip string representation of the IPv4 address
  * @returns an instance of Ipv4Address
  */
-export function address(ip: string): Ipv4Address {
+export function address(ip: string | bigint): Ipv4Address {
   return new Ipv4Address(ip)
 }
 
@@ -82,14 +94,14 @@ export function address(ip: string): Ipv4Address {
  * cidr.ipv4.fromString('0.0.0.255') === 255n                     // ==> true
  * ```
  *
- * @see This method is the inverse of {@link ipv4.toString|ipv4.toString()}
+ * @see This method is the inverse of {@link ipv4.numToString}
  * @throws {@link InvalidIpAddressError}
  *
  * @public
  * @param address IPv4 address represented as a string
  * @returns numerical BigInt representation of the address
  */
-export function fromString(address: string): bigint {
+export function stringToNum(address: string): bigint {
   try {
     let [firstOctet, secondOctet, thirdOctet, fourthOctet] = address
       .split('.')
@@ -124,20 +136,24 @@ export function fromString(address: string): bigint {
  * cidr.ipv4.toString(4_294_967_295n) === '255.255.255.255'        // ==> true
  * ```
  *
- * @see This method is the inverse of {@link ipv4.fromString|ipv4.fromString()}
+ * @see This method is the inverse of {@link ipv4.stringToNum}
  * @throws {@link InvalidIpAddressError}
  *
  * @public
  * @param ip IPv4 address as a BigInt
  * @returns string representation of the address
  */
-export function toString(ip: bigint): string {
-  if (ip < 0 || ip > IPv4_MAX) {
+export function numToString(ip: bigint): string {
+  try {
+    if (ip < 0 || ip > MAX) {
+      throw new Error()
+    }
+    const firstOctet = (ip >> 24n) & MAX_OCTET_SIZE
+    const secondOctet = (ip >> 16n) & MAX_OCTET_SIZE
+    const thirdOctet = (ip >> 8n) & MAX_OCTET_SIZE
+    const fourthOctet = ip & MAX_OCTET_SIZE
+    return `${firstOctet}.${secondOctet}.${thirdOctet}.${fourthOctet}`
+  } catch {
     throw new InvalidIpAddressError(ip.toString())
   }
-  const firstOctet = (ip >> 24n) & MAX_OCTET_SIZE
-  const secondOctet = (ip >> 16n) & MAX_OCTET_SIZE
-  const thirdOctet = (ip >> 8n) & MAX_OCTET_SIZE
-  const fourthOctet = ip & MAX_OCTET_SIZE
-  return `${firstOctet}.${secondOctet}.${thirdOctet}.${fourthOctet}`
 }

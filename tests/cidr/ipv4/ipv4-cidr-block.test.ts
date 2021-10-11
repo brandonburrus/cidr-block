@@ -47,5 +47,16 @@ describe('ipv4', () => {
         expect(cidr.ipv4.block('0.0.0.0' + range).allocatableIpCount).toBe(count)
       }
     )
+
+    it.each([
+      ['0.0.0.0/24', '0.0.1.0/24'],
+      ['0.0.2.0/24', '0.0.3.0/24'],
+      ['0.1.0.0/16', '0.2.0.0/16'],
+      ['0.0.0.1/32', '0.0.0.2/32']
+    ])('calculates the next block [%s to %s]', (start: string, end: string) => {
+      console.log(start, cidr.ipv4.block(start).netmask.toString())
+      expect(cidr.ipv4.block(start).nextBlock().toString()).toBe(end)
+      expect(cidr.ipv4.block(end).previousBlock().toString()).toBe(start)
+    })
   })
 })

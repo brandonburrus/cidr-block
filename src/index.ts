@@ -1,3 +1,3 @@
 export * as ipv4 from './cidr/ipv4/index'
-export * from './cidr/constants'
-export * from './cidr/errors'
+export * as ipv6 from './cidr/ipv6/index'
+export * as errors from './cidr/errors'
