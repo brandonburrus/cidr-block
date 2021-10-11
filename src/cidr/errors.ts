@@ -1,11 +1,11 @@
 export class InvalidIpAddressError extends Error {
   constructor(badIp: string) {
-    super(`${badIp} is not a valid IP address.`)
+    super(`${badIp} is not a valid IPv4 address.`)
   }
 }
 
-export class InvalidCidrError extends Error {
+export class InvalidCidrBlockError extends Error {
   constructor(badCidr: string) {
-    super(`${badCidr} is not a valid cidr block or range.`)
+    super(`${badCidr} is not a valid IPv4 cidr block.`)
   }
 }
