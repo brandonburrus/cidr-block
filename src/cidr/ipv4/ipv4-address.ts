@@ -52,7 +52,7 @@ export class Ipv4Address {
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
- * const localhost = cidr.ipv4.address('172.0.0.0')
+ * const localhost = cidr.ipv4.address('127.0.0.1')
  * ```
  *
  * @see {@link Ipv4Address}
