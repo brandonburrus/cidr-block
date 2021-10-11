@@ -21,6 +21,7 @@
   "scripts": {
     "build": "rollup -c",
     "build:watch": "rollup -cw",
+    "predocs": "rimraf docs",
     "docs": "typedoc src/index.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --fix --ext .ts",
