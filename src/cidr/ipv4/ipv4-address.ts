@@ -150,10 +150,9 @@ export function stringToNum(address: string): bigint {
       .split('.')
       .map(BigInt)
       .filter(octet => octet >= 0 && octet <= MAX_OCTET_SIZE)
-    firstOctet = (firstOctet! & MAX_OCTET_SIZE) << 24n
-    secondOctet = (secondOctet! & MAX_OCTET_SIZE) << 16n
-    thirdOctet = (thirdOctet! & MAX_OCTET_SIZE) << 8n
-    fourthOctet = fourthOctet! & MAX_OCTET_SIZE
+    firstOctet = firstOctet << 24n
+    secondOctet = secondOctet << 16n
+    thirdOctet = thirdOctet << 8n
     return firstOctet + secondOctet + thirdOctet + fourthOctet
   } catch {
     throw new InvalidIpAddressError(address)
