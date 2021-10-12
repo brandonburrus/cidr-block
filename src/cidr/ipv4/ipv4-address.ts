@@ -2,7 +2,7 @@ import { Ipv4Literal, Ipv4Representable } from './types'
 import { InvalidIpAddressError } from './../errors'
 import { MAX } from './constants'
 
-const MAX_OCTET_SIZE = 255n
+const MAX_OCTET_SIZE = 255
 
 /**
  * Representation of an IPv4 address. Provides various utility methods like equality
@@ -12,16 +12,16 @@ const MAX_OCTET_SIZE = 255n
  * Direct instantiation should be avoided; use {@link ipv4.address|ipv4.address()} instead.
  */
 export class Ipv4Address {
-  private _address: bigint
+  private _address: number
 
   public constructor(address: Ipv4Literal) {
-    this._address = typeof address === 'bigint' ? address : stringToNum(address)
+    this._address = typeof address === 'number' ? address : stringToNum(address)
   }
 
   /**
-   * The address as a big integer
+   * The address as a number
    */
-  public get address(): bigint {
+  public get address(): number {
     return this._address
   }
 
@@ -78,7 +78,7 @@ export class Ipv4Address {
    * @returns the next consecutive IPv4 address
    */
   public nextIp(): Ipv4Address {
-    return address(this._address + 1n)
+    return address(this._address + 1)
   }
 
   /**
@@ -94,7 +94,7 @@ export class Ipv4Address {
    * @returns the preceding IPv4 address
    */
   public previousIp(): Ipv4Address {
-    return address(this._address - 1n)
+    return address(this._address - 1)
   }
 }
 
@@ -126,7 +126,7 @@ export function address(ip: Ipv4Literal): Ipv4Address {
 }
 
 /**
- * Converts the string representation of an IPv4 address to a BigInt.
+ * Converts the string representation of an IPv4 address to a number.
  *
  * @example
  *
@@ -142,17 +142,21 @@ export function address(ip: Ipv4Literal): Ipv4Address {
  *
  * @public
  * @param address IPv4 address represented as a string
- * @returns numerical BigInt representation of the address
+ * @returns numerical number representation of the address
  */
-export function stringToNum(address: string): bigint {
+export function stringToNum(address: string): number {
   try {
-    let [firstOctet, secondOctet, thirdOctet, fourthOctet] = address
-      .split('.')
-      .map(BigInt)
-      .filter(octet => octet >= 0 && octet <= MAX_OCTET_SIZE)
-    firstOctet = firstOctet << 24n
-    secondOctet = secondOctet << 16n
-    thirdOctet = thirdOctet << 8n
+    if (address.length < 7) {
+      throw new Error()
+    }
+    let octets = address.split('.').map(Number)
+    if (octets.some(octet => octet < 0 || octet > MAX_OCTET_SIZE)) {
+      throw new Error()
+    }
+    let [firstOctet, secondOctet, thirdOctet, fourthOctet] = octets
+    firstOctet = (firstOctet << 24) >>> 0
+    secondOctet = (secondOctet << 16) >>> 0
+    thirdOctet = (thirdOctet << 8) >>> 0
     return firstOctet + secondOctet + thirdOctet + fourthOctet
   } catch {
     throw new InvalidIpAddressError(address)
@@ -160,7 +164,7 @@ export function stringToNum(address: string): bigint {
 }
 
 /**
- * Converts the numerical BigInt representation of an IPv4 address to its string representation.
+ * Converts the numerical number representation of an IPv4 address to its string representation.
  *
  * @example
  *
@@ -176,17 +180,17 @@ export function stringToNum(address: string): bigint {
  * @throws {@link InvalidIpAddressError}
  *
  * @public
- * @param ip IPv4 address as a BigInt
+ * @param ip IPv4 address as a number
  * @returns string representation of the address
  */
-export function numToString(ip: bigint): string {
+export function numToString(ip: number): string {
   try {
     if (ip < 0 || ip > MAX) {
       throw new Error()
     }
-    const firstOctet = (ip >> 24n) & MAX_OCTET_SIZE
-    const secondOctet = (ip >> 16n) & MAX_OCTET_SIZE
-    const thirdOctet = (ip >> 8n) & MAX_OCTET_SIZE
+    const firstOctet = (ip >>> 24) & MAX_OCTET_SIZE
+    const secondOctet = (ip >>> 16) & MAX_OCTET_SIZE
+    const thirdOctet = (ip >>> 8) & MAX_OCTET_SIZE
     const fourthOctet = ip & MAX_OCTET_SIZE
     return `${firstOctet}.${secondOctet}.${thirdOctet}.${fourthOctet}`
   } catch {

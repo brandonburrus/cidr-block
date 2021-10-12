@@ -27,15 +27,15 @@ export class Ipv4Cidr {
   /**
    * Number of IP addresses within the cidr range
    */
-  public get allocatableIpCount(): bigint {
-    return 2n ** this.addressLength
+  public get allocatableIpCount(): number {
+    return 2 ** this.addressLength
   }
 
   /**
    * The actual IPv4 netmask address
    */
   public get netmask(): Ipv4Address {
-    return ipAddress((2n ** BigInt(this.maskSize) - 1n) << this.addressLength)
+    return ipAddress((2 ** this.maskSize - 1) << this.addressLength)
   }
 
   /**
@@ -50,11 +50,11 @@ export class Ipv4Cidr {
    */
   public get lastUsableIp(): Ipv4Address {
     // FIXME: Handle edge case of when cidr range goes outside valid ip range
-    return ipAddress(this._ipAddress.address + 2n ** this.addressLength - 1n)
+    return ipAddress(this._ipAddress.address + 2 ** this.addressLength - 1)
   }
 
-  private get addressLength(): bigint {
-    return BigInt(Math.abs(32 - this._maskSize))
+  private get addressLength(): number {
+    return Math.abs(32 - this._maskSize)
   }
 
   /**
@@ -68,7 +68,7 @@ export class Ipv4Cidr {
    * @returns the next consecutive cidr block
    */
   public nextBlock(ofSize?: number): Ipv4Cidr {
-    const nextIp = this._ipAddress.address + 2n ** this.addressLength
+    const nextIp = this._ipAddress.address + 2 ** this.addressLength
     return cidr(`${numToString(nextIp)}/${ofSize ?? this._maskSize}`)
   }
 
@@ -76,7 +76,7 @@ export class Ipv4Cidr {
    * @returns the previous cidr block
    */
   public previousBlock(): Ipv4Cidr {
-    const nextIp = this._ipAddress.address - 2n ** this.addressLength
+    const nextIp = this._ipAddress.address - 2 ** this.addressLength
     return cidr(`${numToString(nextIp)}/${this._maskSize}`)
   }
 
