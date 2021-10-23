@@ -9,7 +9,7 @@ const MAX_OCTET_SIZE = 255
  * checking.
  *
  * @remarks
- * Direct instantiation should be avoided; use {@link ipv4.address|ipv4.address()} instead.
+ * Direct instantiation should be avoided; use {@link ipv4.address} instead.
  */
 export class Ipv4Address {
   private _address: number
@@ -30,8 +30,8 @@ export class Ipv4Address {
    * ```typescript
    * import { ipv4 as ip } from 'cidr-block'
    *
-   * ip.address(255n)                                    // ==> '0.0.0.255'
-   * ip.address(0b11111111_00000000_11111111_00000000n)  // ==> '255.0.255.0'
+   * ip.address(255)                                     // ==> '0.0.0.255'
+   * ip.address(0b11111111_00000000_11111111_00000000)   // ==> '255.0.255.0'
    * ````
    *
    * @public
@@ -133,8 +133,8 @@ export function address(ip: Ipv4Literal): Ipv4Address {
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
- * cidr.ipv4.stringToNum('255.255.255.255') === 4_294_967_295n     // ==> true
- * cidr.ipv4.stringToNum('0.0.0.255') === 255n                     // ==> true
+ * cidr.ipv4.stringToNum('255.255.255.255') === 4_294_967_295      // ==> true
+ * cidr.ipv4.stringToNum('0.0.0.255') === 255                      // ==> true
  * ```
  *
  * @see This method is the inverse of {@link ipv4.numToString}
@@ -171,9 +171,9 @@ export function stringToNum(address: string): number {
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
- * cidr.ipv4.numToString(0n) === '0.0.0.0'                            // ==> true
- * cidr.ipv4.numToString(65_280n) === '0.0.255.0'                     // ==> true
- * cidr.ipv4.numToString(4_294_967_295n) === '255.255.255.255'        // ==> true
+ * cidr.ipv4.numToString(0) === '0.0.0.0'                             // ==> true
+ * cidr.ipv4.numToString(65_280) === '0.0.255.0'                      // ==> true
+ * cidr.ipv4.numToString(4_294_967_295) === '255.255.255.255'         // ==> true
  * ```
  *
  * @see This method is the inverse of {@link ipv4.stringToNum}
