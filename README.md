@@ -2,10 +2,6 @@
 
 ipv4 and ipv6 address and cidr range utilities
 
-## WARNING
-
-This package is still in _very_ early stages and should **NOT** be used in production code!
-
 ## Installation
 
 To install npm package, run the following in your project:
@@ -62,8 +58,9 @@ Q: Why are the imports in all the example code like that?
 A: The imports in all example code are formatted as the following:
 
 ```typescript
+// esm
 import { ipv4 as ip } from 'cidr-block'
-// or commonjs-style
+// commonjs
 const { ipv4: ip } = require('cidr-block')
 ```
 

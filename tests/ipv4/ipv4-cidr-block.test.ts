@@ -1,5 +1,5 @@
-import { Ipv4Cidr } from '../../../src/cidr/ipv4/ipv4-cidr'
-import * as cidr from '../../../src/index'
+import { Ipv4Cidr } from '../../src/ipv4/ipv4-cidr'
+import * as cidr from '../../src/index'
 
 describe('ipv4', () => {
   describe('block()', () => {

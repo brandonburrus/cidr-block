@@ -9,7 +9,7 @@ const MAX_OCTET_SIZE = 255
  * checking.
  *
  * @remarks
- * Direct instantiation should be avoided; use {@link ipv4.address} instead.
+ * Avoid direct instantiation; use {@link ipv4.address} instead.
  */
 export class Ipv4Address {
   private _address: number
@@ -26,6 +26,8 @@ export class Ipv4Address {
   }
 
   /**
+   * Returns the string representation of the address
+   *
    * @example
    * ```typescript
    * import { ipv4 as ip } from 'cidr-block'
@@ -42,7 +44,7 @@ export class Ipv4Address {
   }
 
   /**
-   * Compares if two IP address are the same.
+   * Compares if two IPv4 addresses are the same.
    *
    * @example
    * ```typescript
@@ -66,18 +68,21 @@ export class Ipv4Address {
   }
 
   /**
+   * Calculates the next logical IPv4 address.
+   *
    * @example
    * ```typescript
    * import { ipv4 as ip } from 'cidr-block'
    *
    * const myIp = ip.address('52.89.32.255')
-   * myIp.nextIp()                                       // ==> '52.89.33.0
+   * myIp.nextIp()                                       // ==> '52.89.33.0'
    * ```
    *
    * @public
    * @returns the next consecutive IPv4 address
    */
   public nextIp(): Ipv4Address {
+    // TODO: Handle last ip address
     return address(this._address + 1)
   }
 
@@ -87,7 +92,7 @@ export class Ipv4Address {
    * import { ipv4 as ip } from 'cidr-block'
    *
    * const myIp = ip.address('52.89.32.19')
-   * myIp.previousIp()                                   // ==> '52.89.32.18
+   * myIp.previousIp()                                   // ==> '52.89.32.18'
    * ```
    *
    * @public
@@ -102,11 +107,8 @@ export class Ipv4Address {
  * Convenience function for creating an IPv4 address instance.
  *
  * @remarks
- *
  * In general, you should use this function instead of instantiating an Ipv4Address
- * object directly. While there is nothing wrong with direct instantiation, convenience
- * methods like these are meant to help reduce the footprint of your code and increase
- * readability.
+ * object directly.
  *
  * @example
  *
@@ -118,10 +120,12 @@ export class Ipv4Address {
  *
  * @see {@link Ipv4Address}
  *
+ * @public
  * @param ip string representation of the IPv4 address
  * @returns an instance of Ipv4Address
  */
 export function address(ip: Ipv4Literal): Ipv4Address {
+  // TODO: Implement memoization
   return new Ipv4Address(ip)
 }
 
@@ -129,7 +133,6 @@ export function address(ip: Ipv4Literal): Ipv4Address {
  * Converts the string representation of an IPv4 address to a number.
  *
  * @example
- *
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
@@ -164,10 +167,9 @@ export function stringToNum(address: string): number {
 }
 
 /**
- * Converts the numerical number representation of an IPv4 address to its string representation.
+ * Converts the numerical representation of an IPv4 address to its string representation.
  *
  * @example
- *
  * ```typescript
  * import * as cidr from 'cidr-block'
  *
