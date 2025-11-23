@@ -1,3 +1,2 @@
-export * as ipv4 from './ipv4/index'
-export * as ipv6 from './ipv6/index'
-export * as errors from './errors'
+export * from './ipv4'
+export * from './ipv6'

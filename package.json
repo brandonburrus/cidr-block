@@ -1,7 +1,7 @@
 {
   "name": "cidr-block",
-  "description": "ipv4 and ipv6 address and cidr range utilities",
-  "version": "1.3.2",
+  "description": "IPv4 and IPv6 address and cidr range utilities",
+  "version": "2.0.0",
   "license": "MIT",
   "author": "Brandon Burrus <brandon@burrus.io>",
   "homepage": "https://cidr-block.com",
@@ -12,28 +12,37 @@
   "bugs": {
     "url": "https://github.com/BrandonBurrus/cidr-block/issues"
   },
-  "main": "build/index.js",
-  "module": "build/index.esm.js",
-  "types": "build/index.d.ts",
+  "type": "module",
+  "main": "./dist/cjs/index.cjs",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.cts",
+        "default": "./dist/cjs/index.cjs"
+      }
+    }
+  },
   "files": [
-    "build"
+    "dist"
   ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "rollup -c",
-    "build:watch": "rollup -cw",
-    "predocs": "rimraf docs",
-    "docs": "typedoc src/index.ts",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --fix --ext .ts",
-    "format": "prettier --check **/*.ts",
-    "format:fix": "prettier --write **/*.ts",
-    "prebuild": "rimraf build",
-    "test": "jest",
-    "test:ci": "jest --verbose",
-    "test:cov": "jest --coverage",
-    "test:verbose": "jest --verbose",
-    "test:watch": "jest --watch",
-    "test:ui": "majestic"
+    "docgen": "typedoc",
+    "lint": "biome check",
+    "lint:fix": "biome check --fix",
+    "format": "biome format",
+    "format:fix": "biome format --fix"
   },
   "keywords": [
     "aws",
@@ -50,64 +59,18 @@
     "vpc"
   ],
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.2.5",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.10.3",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "jest": "^27.2.5",
-    "majestic": "^1.8.1",
-    "prettier": "^2.4.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.58.0",
-    "ts-jest": "^27.0.5",
-    "typedoc": "^0.22.5",
-    "typescript": "^4.4.3"
+    "@biomejs/biome": "^2.3.7",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "rimraf": "^6.1.2",
+    "rollup": "^4.53.3",
+    "rollup-plugin-dts": "^6.2.3",
+    "tslib": "^2.8.1",
+    "typedoc-github-theme": "^0.3.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.13"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100
-      }
-    }
-  },
-  "eslintConfig": {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended"
-    ],
-    "rules": {
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "prefer-const": "off"
-    }
-  },
-  "prettier": {
-    "arrowParens": "avoid",
-    "bracketSameLine": true,
-    "bracketSpacing": true,
-    "jsxSingleQuote": true,
-    "printWidth": 100,
-    "quoteProps": "as-needed",
-    "semi": false,
-    "singleQuote": true,
-    "useTabs": false,
-    "trailingComma": "none"
+  "dependencies": {
+    "typedoc": "^0.28.14"
   }
 }
