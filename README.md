@@ -38,6 +38,8 @@ console.log(v6addr.toString()); // "2001:db8::1"
 
 ## API Reference
 
+Full documentation can be found at [cidr-block.com](https://cidr-block.com).
+
 ### IPv4
 
 #### Creating Addresses
