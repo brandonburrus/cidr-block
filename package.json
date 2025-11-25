@@ -1,7 +1,7 @@
 {
   "name": "cidr-block",
   "description": "IPv4 and IPv6 address and cidr range utilities",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "license": "MIT",
   "author": "Brandon Burrus <brandon@burrus.io>",
   "homepage": "https://cidr-block.com",
@@ -42,7 +42,10 @@
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "format": "biome format",
-    "format:fix": "biome format --fix"
+    "format:fix": "biome format --fix",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [
     "aws",
@@ -62,6 +65,7 @@
     "@biomejs/biome": "^2.3.7",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
+    "@vitest/coverage-v8": "^4.0.14",
     "rimraf": "^6.1.2",
     "rollup": "^4.53.3",
     "rollup-plugin-dts": "^6.2.3",

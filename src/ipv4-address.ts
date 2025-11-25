@@ -134,7 +134,7 @@ export class Ipv4Address {
    */
   public toNumber(): number {
     return (
-      (this.#octets[0] << 24) | (this.#octets[1] << 16) | (this.#octets[2] << 8) | this.#octets[3]
+      ((this.#octets[0] << 24) | (this.#octets[1] << 16) | (this.#octets[2] << 8) | this.#octets[3]) >>> 0
     )
   }
 
