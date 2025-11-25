@@ -1,7 +1,7 @@
 {
   "name": "cidr-block",
   "description": "IPv4 and IPv6 address and cidr range utilities",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "author": "Brandon Burrus <brandon@burrus.io>",
   "homepage": "https://cidr-block.com",
@@ -66,11 +66,9 @@
     "rollup": "^4.53.3",
     "rollup-plugin-dts": "^6.2.3",
     "tslib": "^2.8.1",
+    "typedoc": "^0.28.14",
     "typedoc-github-theme": "^0.3.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.13"
-  },
-  "dependencies": {
-    "typedoc": "^0.28.14"
   }
 }
