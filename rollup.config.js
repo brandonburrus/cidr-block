@@ -19,6 +19,9 @@ export default [
         declaration: true,
         declarationDir: 'dist/esm',
         outDir: 'dist/esm',
+        compilerOptions: {
+          importHelpers: false,
+        },
       }),
     ],
   },
@@ -39,6 +42,9 @@ export default [
         tsconfig: './tsconfig.json',
         declaration: false,
         outDir: 'dist/cjs',
+        compilerOptions: {
+          importHelpers: false,
+        },
       }),
     ],
   },
