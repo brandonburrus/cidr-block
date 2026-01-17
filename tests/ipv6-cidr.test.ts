@@ -81,6 +81,30 @@ describe('ipv6.cidr', () => {
       expect(ipv6.cidr('::/0').netmask().toString()).toBe('::')
     })
 
+    it('should calculate network address', () => {
+      expect(ipv6.cidr('2001:db8::1234/32').network().toString()).toBe('2001:db8::')
+      expect(ipv6.cidr('2001:db8:1:2:3:4:5:6/64').network().toString()).toBe('2001:db8:1:2::')
+      expect(ipv6.cidr('2001:db8:abcd:ef01:2345:6789:abcd:ef01/48').network().toString()).toBe('2001:db8:abcd::')
+      expect(ipv6.cidr('2001:db8::/32').network().toString()).toBe('2001:db8::')
+      expect(ipv6.cidr('2001:db8::1/128').network().toString()).toBe('2001:db8::1')
+      expect(ipv6.cidr('::/0').network().toString()).toBe('::')
+      expect(ipv6.cidr('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128').network().toString()).toBe('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')
+      expect(ipv6.cidr('2001:db8::ffff/112').network().toString()).toBe('2001:db8::')
+      expect(ipv6.cidr('2001:db8:0:0:1::/80').network().toString()).toBe('2001:db8:0:0:1::')
+    })
+
+    it('should calculate network CIDR', () => {
+      expect(ipv6.cidr('2001:db8::1234/32').networkCIDR().toString()).toBe('2001:db8::/32')
+      expect(ipv6.cidr('2001:db8:1:2:3:4:5:6/64').networkCIDR().toString()).toBe('2001:db8:1:2::/64')
+      expect(ipv6.cidr('2001:db8:abcd:ef01:2345:6789:abcd:ef01/48').networkCIDR().toString()).toBe('2001:db8:abcd::/48')
+      expect(ipv6.cidr('2001:db8::/32').networkCIDR().toString()).toBe('2001:db8::/32')
+      expect(ipv6.cidr('2001:db8::1/128').networkCIDR().toString()).toBe('2001:db8::1/128')
+      expect(ipv6.cidr('::/0').networkCIDR().toString()).toBe('::/0')
+      expect(ipv6.cidr('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128').networkCIDR().toString()).toBe('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128')
+      expect(ipv6.cidr('2001:db8::ffff/112').networkCIDR().toString()).toBe('2001:db8::/112')
+      expect(ipv6.cidr('2001:db8:0:0:1::/80').networkCIDR().toString()).toBe('2001:db8:0:0:1::/80')
+    })
+
     it('should calculate address count', () => {
       expect(ipv6.cidr('2001:db8::/32').addressCount()).toBe(79228162514264337593543950336n)
       expect(ipv6.cidr('2001:db8::/64').addressCount()).toBe(18446744073709551616n)

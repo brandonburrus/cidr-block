@@ -27,6 +27,7 @@ import type { Ipv4CidrLiteral, Ipv4CidrString } from './ipv4-types'
  * cidr.baseAddress().toString(); // "192.168.0.0"
  * cidr.range();                  // 24
  * cidr.netmask().toString();     // "255.255.255.0"
+ * cidr.network().toString();     // "192.168.0.0"
  * cidr.addressCount();           // 256
  * ```
  *
@@ -159,6 +160,46 @@ export class Ipv4Cidr {
   public netmask(): Ipv4Address {
     const maskNumber = this.#range === 0 ? 0 : (~0 << (32 - this.#range)) >>> 0
     return new Ipv4Address(maskNumber)
+  }
+
+  /**
+   * Calculates the network address by applying the netmask to the base address.
+   *
+   * @example
+   * ```ts
+   * import { ipv4 } from 'cidr-block';
+   *
+   * ipv4.cidr("192.168.1.5/24").network().toString(); // "192.168.1.0"
+   * ipv4.cidr("10.5.10.20/8").network().toString();   // "10.0.0.0"
+   * ipv4.cidr("172.16.5.1/16").network().toString();  // "172.16.0.0"
+   * ```
+   *
+   * @returns The network address as an Ipv4Address.
+   */
+  public network(): Ipv4Address {
+    const maskNumber = this.#range === 0 ? 0 : (~0 << (32 - this.#range)) >>> 0
+    const networkNumber = (this.#address.toNumber() & maskNumber) >>> 0
+    return new Ipv4Address(networkNumber)
+  }
+
+  /**
+   * Calculates the network CIDR by applying the netmask to the base address and returning a CIDR with the network address.
+   *
+   * @example
+   * ```ts
+   * import { ipv4 } from 'cidr-block';
+   *
+   * ipv4.cidr("192.168.1.5/24").networkCIDR().toString(); // "192.168.1.0/24"
+   * ipv4.cidr("10.5.10.20/8").networkCIDR().toString();   // "10.0.0.0/8"
+   * ipv4.cidr("172.16.5.1/16").networkCIDR().toString();  // "172.16.0.0/16"
+   * ```
+   *
+   * @returns The network CIDR as an Ipv4Cidr.
+   */
+  public networkCIDR(): Ipv4Cidr {
+    const maskNumber = this.#range === 0 ? 0 : (~0 << (32 - this.#range)) >>> 0
+    const networkNumber = (this.#address.toNumber() & maskNumber) >>> 0
+    return new Ipv4Cidr([networkNumber, this.#range])
   }
 
   /**

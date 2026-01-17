@@ -186,6 +186,11 @@ cidr.range();                     // 24
 cidr.netmask().toString();        // "255.255.255.0"
 cidr.addressCount();              // 256
 cidr.rangeParts();                // [Ipv4Address, 24]
+
+// Calculate network address from CIDR with host bits
+const hostCidr = ipv4.cidr('192.168.1.5/24');
+hostCidr.network().toString();      // "192.168.1.0"
+hostCidr.networkCIDR().toString();  // "192.168.1.0/24"
 ```
 
 #### Usable Addresses
@@ -440,6 +445,11 @@ cidr.baseAddress().toString();    // "2001:db8::"
 cidr.range();                     // 32
 cidr.netmask().toString();        // "ffff:ffff::"
 cidr.addressCount();              // 79228162514264337593543950336n (BigInt)
+
+// Calculate network address from CIDR with host bits
+const hostCidr = ipv6.cidr('2001:db8::1234/32');
+hostCidr.network().toString();      // "2001:db8::"
+hostCidr.networkCIDR().toString();  // "2001:db8::/32"
 ```
 
 #### Usable Addresses
@@ -692,4 +702,30 @@ function getUsableIPs(cidrStr: string): string[] {
 
 const usable = getUsableIPs('192.168.1.0/29');
 // ['192.168.1.1', '192.168.1.2', '192.168.1.3', '192.168.1.4', '192.168.1.5', '192.168.1.6']
+```
+
+### Normalizing CIDR Blocks
+
+```typescript
+import { ipv4, ipv6 } from 'cidr-block';
+
+// Normalize IPv4 CIDR by removing host bits
+function normalizeIPv4CIDR(cidrStr: string): string {
+  const cidr = ipv4.cidr(cidrStr);
+  return cidr.networkCIDR().toString();
+}
+
+normalizeIPv4CIDR('192.168.1.5/24');    // "192.168.1.0/24"
+normalizeIPv4CIDR('10.5.10.20/8');      // "10.0.0.0/8"
+normalizeIPv4CIDR('172.16.50.100/12');  // "172.16.0.0/12"
+
+// Normalize IPv6 CIDR by removing host bits
+function normalizeIPv6CIDR(cidrStr: string): string {
+  const cidr = ipv6.cidr(cidrStr);
+  return cidr.networkCIDR().toString();
+}
+
+normalizeIPv6CIDR('2001:db8::1234/32');                   // "2001:db8::/32"
+normalizeIPv6CIDR('2001:db8:1:2:3:4:5:6/64');             // "2001:db8:1:2::/64"
+normalizeIPv6CIDR('2001:db8:abcd:ef01::/48');             // "2001:db8:abcd::/48"
 ```

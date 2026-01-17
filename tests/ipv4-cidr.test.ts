@@ -88,6 +88,30 @@ describe('ipv4.cidr', () => {
       expect(ipv4.cidr('0.0.0.0/0').netmask().toString()).toBe('0.0.0.0')
     })
 
+    it('should calculate network address', () => {
+      expect(ipv4.cidr('192.168.1.5/24').network().toString()).toBe('192.168.1.0')
+      expect(ipv4.cidr('10.5.10.20/8').network().toString()).toBe('10.0.0.0')
+      expect(ipv4.cidr('172.16.5.1/16').network().toString()).toBe('172.16.0.0')
+      expect(ipv4.cidr('192.168.0.0/24').network().toString()).toBe('192.168.0.0')
+      expect(ipv4.cidr('192.168.1.5/32').network().toString()).toBe('192.168.1.5')
+      expect(ipv4.cidr('0.0.0.0/0').network().toString()).toBe('0.0.0.0')
+      expect(ipv4.cidr('255.255.255.255/32').network().toString()).toBe('255.255.255.255')
+      expect(ipv4.cidr('192.168.1.127/25').network().toString()).toBe('192.168.1.0')
+      expect(ipv4.cidr('192.168.1.128/25').network().toString()).toBe('192.168.1.128')
+    })
+
+    it('should calculate network CIDR', () => {
+      expect(ipv4.cidr('192.168.1.5/24').networkCIDR().toString()).toBe('192.168.1.0/24')
+      expect(ipv4.cidr('10.5.10.20/8').networkCIDR().toString()).toBe('10.0.0.0/8')
+      expect(ipv4.cidr('172.16.5.1/16').networkCIDR().toString()).toBe('172.16.0.0/16')
+      expect(ipv4.cidr('192.168.0.0/24').networkCIDR().toString()).toBe('192.168.0.0/24')
+      expect(ipv4.cidr('192.168.1.5/32').networkCIDR().toString()).toBe('192.168.1.5/32')
+      expect(ipv4.cidr('0.0.0.0/0').networkCIDR().toString()).toBe('0.0.0.0/0')
+      expect(ipv4.cidr('255.255.255.255/32').networkCIDR().toString()).toBe('255.255.255.255/32')
+      expect(ipv4.cidr('192.168.1.127/25').networkCIDR().toString()).toBe('192.168.1.0/25')
+      expect(ipv4.cidr('192.168.1.128/25').networkCIDR().toString()).toBe('192.168.1.128/25')
+    })
+
     it('should calculate address count', () => {
       expect(ipv4.cidr('192.168.0.0/24').addressCount()).toBe(256)
       expect(ipv4.cidr('10.0.0.0/8').addressCount()).toBe(16777216)

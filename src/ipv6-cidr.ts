@@ -27,6 +27,7 @@ import type { Ipv6CidrLiteral } from './ipv6-types'
  * cidr.baseAddress().toString(); // "2001:db8::"
  * cidr.range();                  // 32
  * cidr.netmask().toString();     // "ffff:ffff::"
+ * cidr.network().toString();     // "2001:db8::"
  * cidr.addressCount();           // 79228162514264337593543950336n
  * ```
  *
@@ -148,6 +149,52 @@ export class Ipv6Cidr {
     // Create a mask with `range` 1-bits followed by (128 - range) 0-bits
     const mask = (1n << 128n) - (1n << BigInt(128 - this.#range))
     return new Ipv6Address(mask)
+  }
+
+  /**
+   * Calculates the network address by applying the netmask to the base address.
+   *
+   * @example
+   * ```ts
+   * import { ipv6 } from 'cidr-block';
+   *
+   * ipv6.cidr("2001:db8::1234/32").network().toString();        // "2001:db8::"
+   * ipv6.cidr("2001:db8:1:2:3:4:5:6/64").network().toString();  // "2001:db8:1:2::"
+   * ipv6.cidr("2001:db8:abcd::/48").network().toString();       // "2001:db8:abcd::"
+   * ```
+   *
+   * @returns The network address as an Ipv6Address.
+   */
+  public network(): Ipv6Address {
+    if (this.#range === 0) {
+      return new Ipv6Address(0n)
+    }
+    const mask = (1n << 128n) - (1n << BigInt(128 - this.#range))
+    const networkNumber = this.#address.toBigInt() & mask
+    return new Ipv6Address(networkNumber)
+  }
+
+  /**
+   * Calculates the network CIDR by applying the netmask to the base address and returning a CIDR with the network address.
+   *
+   * @example
+   * ```ts
+   * import { ipv6 } from 'cidr-block';
+   *
+   * ipv6.cidr("2001:db8::1234/32").networkCIDR().toString();        // "2001:db8::/32"
+   * ipv6.cidr("2001:db8:1:2:3:4:5:6/64").networkCIDR().toString();  // "2001:db8:1:2::/64"
+   * ipv6.cidr("2001:db8:abcd::/48").networkCIDR().toString();       // "2001:db8:abcd::/48"
+   * ```
+   *
+   * @returns The network CIDR as an Ipv6Cidr.
+   */
+  public networkCIDR(): Ipv6Cidr {
+    if (this.#range === 0) {
+      return new Ipv6Cidr([0n, 0])
+    }
+    const mask = (1n << 128n) - (1n << BigInt(128 - this.#range))
+    const networkNumber = this.#address.toBigInt() & mask
+    return new Ipv6Cidr([networkNumber, this.#range])
   }
 
   /**
