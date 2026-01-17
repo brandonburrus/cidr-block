@@ -152,6 +152,35 @@ export class Ipv6Cidr {
   }
 
   /**
+   * Calculates the hostmask (inverse of the netmask) for the CIDR range.
+   *
+   * @example
+   * ```ts
+   * import { ipv6 } from 'cidr-block';
+   *
+   * ipv6.cidr("2001:db8::/32").hostmask().toString();  // "::ffff:ffff:ffff:ffff:ffff:ffff"
+   * ipv6.cidr("2001:db8::/64").hostmask().toString();  // "::ffff:ffff:ffff:ffff"
+   * ipv6.cidr("2001:db8::/48").hostmask().toString();  // "::ffff:ffff:ffff:ffff:ffff"
+   * ```
+   *
+   * @returns The hostmask as an Ipv6Address.
+   */
+  public hostmask(): Ipv6Address {
+    if (this.#range === 0) {
+      // For /0, hostmask is all 1s
+      return new Ipv6Address((1n << 128n) - 1n)
+    }
+    if (this.#range === 128) {
+      // For /128, hostmask is all 0s
+      return new Ipv6Address(0n)
+    }
+    // Hostmask is the bitwise NOT of the netmask
+    const mask = (1n << 128n) - (1n << BigInt(128 - this.#range))
+    const hostmask = ((1n << 128n) - 1n) ^ mask
+    return new Ipv6Address(hostmask)
+  }
+
+  /**
    * Calculates the network address by applying the netmask to the base address.
    *
    * @example

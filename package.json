@@ -1,7 +1,7 @@
 {
   "name": "cidr-block",
   "description": "IPv4 and IPv6 address and cidr range utilities",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "license": "MIT",
   "author": "Brandon Burrus <brandon@burrus.io>",
   "homepage": "https://cidr-block.com",

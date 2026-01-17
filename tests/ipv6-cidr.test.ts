@@ -81,6 +81,15 @@ describe('ipv6.cidr', () => {
       expect(ipv6.cidr('::/0').netmask().toString()).toBe('::')
     })
 
+    it('should calculate hostmask', () => {
+      expect(ipv6.cidr('2001:db8::/32').hostmask().toString()).toBe('::ffff:ffff:ffff:ffff:ffff:ffff')
+      expect(ipv6.cidr('2001:db8::/64').hostmask().toString()).toBe('::ffff:ffff:ffff:ffff')
+      expect(ipv6.cidr('2001:db8::/48').hostmask().toString()).toBe('::ffff:ffff:ffff:ffff:ffff')
+      expect(ipv6.cidr('2001:db8::/128').hostmask().toString()).toBe('::')
+      expect(ipv6.cidr('::/0').hostmask().toString()).toBe('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')
+      expect(ipv6.cidr('2001:db8::/112').hostmask().toString()).toBe('::ffff')
+    })
+
     it('should calculate network address', () => {
       expect(ipv6.cidr('2001:db8::1234/32').network().toString()).toBe('2001:db8::')
       expect(ipv6.cidr('2001:db8:1:2:3:4:5:6/64').network().toString()).toBe('2001:db8:1:2::')

@@ -88,6 +88,16 @@ describe('ipv4.cidr', () => {
       expect(ipv4.cidr('0.0.0.0/0').netmask().toString()).toBe('0.0.0.0')
     })
 
+    it('should calculate hostmask', () => {
+      expect(ipv4.cidr('192.168.0.0/24').hostmask().toString()).toBe('0.0.0.255')
+      expect(ipv4.cidr('10.0.0.0/8').hostmask().toString()).toBe('0.255.255.255')
+      expect(ipv4.cidr('172.16.0.0/16').hostmask().toString()).toBe('0.0.255.255')
+      expect(ipv4.cidr('192.168.1.0/28').hostmask().toString()).toBe('0.0.0.15')
+      expect(ipv4.cidr('192.168.1.0/30').hostmask().toString()).toBe('0.0.0.3')
+      expect(ipv4.cidr('0.0.0.0/0').hostmask().toString()).toBe('255.255.255.255')
+      expect(ipv4.cidr('192.168.1.1/32').hostmask().toString()).toBe('0.0.0.0')
+    })
+
     it('should calculate network address', () => {
       expect(ipv4.cidr('192.168.1.5/24').network().toString()).toBe('192.168.1.0')
       expect(ipv4.cidr('10.5.10.20/8').network().toString()).toBe('10.0.0.0')

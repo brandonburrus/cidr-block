@@ -11,7 +11,7 @@ npm install cidr-block
 - Full IPv4 and IPv6 address support
 - CIDR block creation and manipulation
 - Address validation and parsing
-- Network calculations (netmask, address count, usable addresses)
+- Network calculations (netmask, hostmask, address count, usable addresses)
 - Subnetting operations
 - Address type detection (private, loopback, multicast, etc.)
 - Full TypeScript support with comprehensive type definitions
@@ -184,6 +184,7 @@ cidr.toString();                  // "192.168.0.0/24"
 cidr.baseAddress().toString();    // "192.168.0.0"
 cidr.range();                     // 24
 cidr.netmask().toString();        // "255.255.255.0"
+cidr.hostmask().toString();       // "0.0.0.255"
 cidr.addressCount();              // 256
 cidr.rangeParts();                // [Ipv4Address, 24]
 
@@ -444,6 +445,7 @@ cidr.toString();                  // "2001:db8::/32"
 cidr.baseAddress().toString();    // "2001:db8::"
 cidr.range();                     // 32
 cidr.netmask().toString();        // "ffff:ffff::"
+cidr.hostmask().toString();       // "::ffff:ffff:ffff:ffff:ffff:ffff"
 cidr.addressCount();              // 79228162514264337593543950336n (BigInt)
 
 // Calculate network address from CIDR with host bits

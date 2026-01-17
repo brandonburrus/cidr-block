@@ -163,6 +163,26 @@ export class Ipv4Cidr {
   }
 
   /**
+   * Calculates the hostmask (inverse of the netmask) for the CIDR range.
+   *
+   * @example
+   * ```ts
+   * import { ipv4 } from 'cidr-block';
+   *
+   * ipv4.cidr("192.168.0.0/24").hostmask().toString(); // "0.0.0.255"
+   * ipv4.cidr("10.0.0.0/8").hostmask().toString();     // "0.255.255.255"
+   * ipv4.cidr("172.16.0.0/16").hostmask().toString();  // "0.0.255.255"
+   * ```
+   *
+   * @returns The hostmask as an Ipv4Address.
+   */
+  public hostmask(): Ipv4Address {
+    const maskNumber = this.#range === 0 ? 0 : (~0 << (32 - this.#range)) >>> 0
+    const hostmaskNumber = ~maskNumber >>> 0
+    return new Ipv4Address(hostmaskNumber)
+  }
+
+  /**
    * Calculates the network address by applying the netmask to the base address.
    *
    * @example
